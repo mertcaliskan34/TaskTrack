@@ -1,7 +1,5 @@
 # TaskTrack - Öğrenci Görev Takip Sistemi
 
-[![Proje Durumu: Geliştirme Aşamasında][status-shield]][status-url]
-
 Üniversite öğrencileri için görev takibini kolaylaştıran, verimliliği artıran bir web uygulaması.
 
 ## İçindekiler
