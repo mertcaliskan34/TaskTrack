@@ -4,13 +4,11 @@ import {
   Typography,
   Button,
   TextField,
-  Grid,
   Paper,
   Alert,
   CircularProgress,
   Divider,
-  Avatar,
-  Container
+  Avatar
 } from '@mui/material';
 import {
   Person as PersonIcon,
@@ -139,15 +137,28 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Box sx={{ 
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      py: { xs: 2, sm: 3, md: 4 },
+      px: { xs: 1, sm: 2, md: 3 },
+      bgcolor: '#f5f5f5'
+    }}>
       {/* Header Section */}
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
+      <Box sx={{ 
+        mb: { xs: 3, sm: 4 }, 
+        textAlign: 'center',
+        width: '100%',
+        maxWidth: '600px'
+      }}>
         <Avatar 
           sx={{ 
-            width: 100, 
-            height: 100, 
+            width: { xs: 80, sm: 90, md: 100 }, 
+            height: { xs: 80, sm: 90, md: 100 }, 
             bgcolor: 'primary.main',
-            fontSize: '2.5rem',
+            fontSize: { xs: '2rem', sm: '2.25rem', md: '2.5rem' },
             fontWeight: 'bold',
             mx: 'auto',
             mb: 2
@@ -155,28 +166,73 @@ const Profile: React.FC = () => {
         >
           {user.username.charAt(0).toUpperCase()}
         </Avatar>
-        <Typography variant="h4" component="h1" gutterBottom color="primary" fontWeight="bold">
+        <Typography 
+          variant="h4" 
+          component="h1" 
+          gutterBottom 
+          color="primary" 
+          fontWeight="bold"
+          sx={{ 
+            fontSize: { xs: '1.75rem', sm: '2rem', md: '2.125rem' }
+          }}
+        >
           {user.username}
         </Typography>
-        <Typography variant="body1" color="text.secondary" gutterBottom>
+        <Typography 
+          variant="body1" 
+          color="text.secondary" 
+          gutterBottom
+          sx={{ 
+            fontSize: { xs: '0.875rem', sm: '1rem' }
+          }}
+        >
           {user.email}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography 
+          variant="body2" 
+          color="text.secondary"
+          sx={{ 
+            fontSize: { xs: '0.75rem', sm: '0.875rem' }
+          }}
+        >
           Üyelik Tarihi: {new Date(user.created_at).toLocaleDateString('tr-TR')}
         </Typography>
       </Box>
 
-      <Grid container spacing={4}>
+      {/* Cards Container */}
+      <Box sx={{ 
+        display: 'flex', 
+        flexDirection: { xs: 'column', lg: 'row' },
+        gap: { xs: 2, sm: 3 },
+        justifyContent: 'center',
+        alignItems: { xs: 'center', lg: 'stretch' },
+        width: '100%',
+        maxWidth: { xs: '100%', sm: '500px', md: '600px', lg: '1000px' },
+        px: { xs: 0, sm: 1 }
+      }}>
         {/* Profil Bilgileri */}
-        <Grid component="div" sx={{ gridColumn: { xs: 'span 12', md: 'span 6' } }}>
-          <Paper elevation={3} sx={{ p: 4, height: 'fit-content' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-              <PersonIcon sx={{ mr: 2, color: 'primary.main', fontSize: 28 }} />
-              <Typography variant="h6" fontWeight="bold">
+        <Box sx={{ 
+          flex: { xs: 'none', lg: 1 },
+          width: { xs: '100%', sm: '100%', md: '100%', lg: 'auto' },
+          minWidth: { xs: '280px', sm: '400px', lg: '400px' },
+          maxWidth: { xs: '100%', sm: '480px', md: '550px', lg: '480px' }
+        }}>
+          <Paper elevation={3} sx={{ 
+            p: { xs: 2, sm: 3, md: 4 }, 
+            height: '100%', 
+            textAlign: 'center' 
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: { xs: 2, sm: 3 } }}>
+              <PersonIcon sx={{ mr: 2, color: 'primary.main', fontSize: { xs: 24, sm: 28 } }} />
+              <Typography 
+                variant="h6" 
+                fontWeight="bold"
+                sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
+              >
                 Hesap Bilgileri
               </Typography>
             </Box>
-            <Divider sx={{ mb: 3 }} />
+            <Divider sx={{ mb: { xs: 2, sm: 3 } }} />
             
             {profileError && (
               <Alert severity="error" sx={{ mb: 3 }}>
@@ -227,24 +283,40 @@ const Profile: React.FC = () => {
                 startIcon={profileLoading ? <CircularProgress size={20} color="inherit" /> : <SaveIcon />}
                 disabled={profileLoading}
                 fullWidth
-                sx={{ py: 1.5 }}
+                sx={{ 
+                  py: { xs: 1.2, sm: 1.5 },
+                  fontSize: { xs: '0.875rem', sm: '1rem' }
+                }}
               >
                 {profileLoading ? 'Güncelleniyor...' : 'Bilgileri Güncelle'}
               </Button>
             </Box>
           </Paper>
-        </Grid>
+        </Box>
         
         {/* Şifre Değiştirme */}
-        <Grid component="div" sx={{ gridColumn: { xs: 'span 12', md: 'span 6' } }}>
-          <Paper elevation={3} sx={{ p: 4, height: 'fit-content' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-              <LockIcon sx={{ mr: 2, color: 'primary.main', fontSize: 28 }} />
-              <Typography variant="h6" fontWeight="bold">
+        <Box sx={{ 
+          flex: { xs: 'none', lg: 1 },
+          width: { xs: '100%', sm: '100%', md: '100%', lg: 'auto' },
+          minWidth: { xs: '280px', sm: '400px', lg: '400px' },
+          maxWidth: { xs: '100%', sm: '480px', md: '550px', lg: '480px' }
+        }}>
+          <Paper elevation={3} sx={{ 
+            p: { xs: 2, sm: 3, md: 4 }, 
+            height: '100%', 
+            textAlign: 'center' 
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: { xs: 2, sm: 3 } }}>
+              <LockIcon sx={{ mr: 2, color: 'primary.main', fontSize: { xs: 24, sm: 28 } }} />
+              <Typography 
+                variant="h6" 
+                fontWeight="bold"
+                sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
+              >
                 Güvenlik
               </Typography>
             </Box>
-            <Divider sx={{ mb: 3 }} />
+            <Divider sx={{ mb: { xs: 2, sm: 3 } }} />
             
             {passwordError && (
               <Alert severity="error" sx={{ mb: 3 }}>
@@ -311,15 +383,18 @@ const Profile: React.FC = () => {
                 startIcon={passwordLoading ? <CircularProgress size={20} color="inherit" /> : <EditIcon />}
                 disabled={passwordLoading}
                 fullWidth
-                sx={{ py: 1.5 }}
+                sx={{ 
+                  py: { xs: 1.2, sm: 1.5 },
+                  fontSize: { xs: '0.875rem', sm: '1rem' }
+                }}
               >
                 {passwordLoading ? 'Değiştiriliyor...' : 'Şifreyi Değiştir'}
               </Button>
             </Box>
           </Paper>
-        </Grid>
-      </Grid>
-    </Container>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

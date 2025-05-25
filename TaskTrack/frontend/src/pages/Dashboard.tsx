@@ -174,7 +174,10 @@ const Dashboard: React.FC = () => {
   };
 
   // Görev durumunu Türkçe olarak göster
-  const getStatusText = (status: string) => {
+  const getStatusText = (status: string, isPastDue?: boolean) => {
+    if (isPastDue && status !== 'completed') {
+      return 'Süresi Geçmiş';
+    }
     switch (status) {
       case 'pending':
         return 'Bekliyor';
@@ -188,7 +191,10 @@ const Dashboard: React.FC = () => {
   };
 
   // Görev durumuna göre renk
-  const getStatusColor = (status: string): 'warning' | 'info' | 'success' | 'default' => {
+  const getStatusColor = (status: string, isPastDue?: boolean): 'warning' | 'info' | 'success' | 'error' | 'default' => {
+    if (isPastDue && status !== 'completed') {
+      return 'error';
+    }
     switch (status) {
       case 'pending':
         return 'warning';
@@ -254,9 +260,9 @@ const Dashboard: React.FC = () => {
                 variant="outlined" 
               />
               <Chip 
-                label={getStatusText(task.status)} 
+                label={getStatusText(task.status, isPastDue)} 
                 size="small" 
-                color={getStatusColor(task.status)}
+                color={getStatusColor(task.status, isPastDue)}
               />
             </Box>
             
@@ -357,7 +363,8 @@ const Dashboard: React.FC = () => {
         width: '100%', 
         maxWidth: '1400px',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        alignItems: 'center'
       }}>
       {/* Header Section */}
       <Box sx={{ 
@@ -402,8 +409,8 @@ const Dashboard: React.FC = () => {
       </Box>
 
       {/* Quick Stats */}
-      <Box sx={{ mb: 4, width: '100%' }}>
-        <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
+      <Box sx={{ mb: 4, width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <Grid container spacing={3} sx={{ width: '100%', m: 0, justifyContent: 'center' }}>
           <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 4' } }}>
             <Paper sx={{ 
               p: 3, 
@@ -505,7 +512,7 @@ const Dashboard: React.FC = () => {
       )}
 
       <TaskTabPanel value={tabValue} index={0}>
-        <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
+        <Grid container spacing={3} sx={{ width: '100%', m: 0, justifyContent: 'center' }}>
           {pendingTasks.length > 0 ? (
             pendingTasks.map(renderTaskCard)
           ) : (
@@ -519,7 +526,7 @@ const Dashboard: React.FC = () => {
       </TaskTabPanel>
 
       <TaskTabPanel value={tabValue} index={1}>
-        <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
+        <Grid container spacing={3} sx={{ width: '100%', m: 0, justifyContent: 'center' }}>
           {inProgressTasks.length > 0 ? (
             inProgressTasks.map(renderTaskCard)
           ) : (
@@ -533,7 +540,7 @@ const Dashboard: React.FC = () => {
       </TaskTabPanel>
 
       <TaskTabPanel value={tabValue} index={2}>
-        <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
+        <Grid container spacing={3} sx={{ width: '100%', m: 0, justifyContent: 'center' }}>
           {completedTasks.length > 0 ? (
             completedTasks.map(renderTaskCard)
           ) : (
