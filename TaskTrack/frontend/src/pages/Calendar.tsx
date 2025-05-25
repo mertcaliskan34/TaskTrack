@@ -209,6 +209,7 @@ const Calendar: React.FC = () => {
     try {
       await taskService.deleteTask(taskId);
       showSnackbar('Görev başarıyla silindi', 'success');
+      handleCloseDialog();
       loadTasks();
     } catch (error) {
       console.error('Görev silinirken hata:', error);
