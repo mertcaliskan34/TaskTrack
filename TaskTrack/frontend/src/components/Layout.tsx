@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { 
-  AppBar, 
-  Box, 
-  CssBaseline, 
-  Divider, 
-  Drawer, 
-  IconButton, 
-  List, 
-  ListItem, 
-  ListItemButton, 
-  ListItemIcon, 
-  ListItemText, 
-  Toolbar, 
-  Typography, 
+import {
+  AppBar,
+  Box,
+  CssBaseline,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Toolbar,
+  Typography,
   Menu,
   MenuItem,
-  Avatar
+  Avatar,
+  Tooltip,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -24,10 +25,16 @@ import {
   CalendarMonth as CalendarIcon,
   BarChart as BarChartIcon,
   AccountCircle as AccountCircleIcon,
-  Logout as LogoutIcon
+  Logout as LogoutIcon,
+  Today as TodayIcon,
+  ChevronLeft,
+  ChevronRight,
 } from '@mui/icons-material';
 import { useAuth } from './AuthContext';
+import { useCalendar } from '../context/CalendarContext';
 import { Outlet } from 'react-router-dom';
+import { format } from 'date-fns';
+import { tr } from 'date-fns/locale';
 
 const drawerWidth = 240;
 
@@ -35,7 +42,7 @@ const Layout: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -68,25 +75,38 @@ const Layout: React.FC = () => {
     { text: 'İstatistikler', icon: <BarChartIcon />, path: '/stats' },
   ];
 
+  const { handlePreviousMonth, handleNextMonth, handleToday, currentDate } = useCalendar();
+
+  // Sidebar drawer
   const drawer = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Toolbar sx={{ 
+
+      {/* Sidebar header */}
+      <Toolbar sx={{
         background: 'linear-gradient(135deg, #2196f3 0%, #21cbf3 100%)',
         color: 'white'
       }}>
+
+        {/* Title */}
         <Typography variant="h6" noWrap component="div" fontWeight="bold">
           TaskTrack
         </Typography>
+        {/* Title */}
+
       </Toolbar>
+      {/* Sidebar header */}
+
       <Divider />
+
+      {/* Sidebar Links */}
       <List sx={{ flexGrow: 1, pt: 2 }}>
         {menuItems.map((item) => (
           <ListItem key={item.text} disablePadding sx={{ mb: 1, px: 2 }}>
-            <ListItemButton 
+            <ListItemButton
               selected={location.pathname === item.path}
               onClick={() => navigate(item.path)}
               sx={{
-                borderRadius: 2,
+                borderRadius: 1,
                 '&.Mui-selected': {
                   bgcolor: 'primary.main',
                   color: 'white',
@@ -104,35 +124,42 @@ const Layout: React.FC = () => {
                 transition: 'all 0.2s ease-in-out',
               }}
             >
-              <ListItemIcon sx={{ 
+              <ListItemIcon sx={{
                 color: location.pathname === item.path ? 'white' : 'primary.main',
-                minWidth: 40 
+                minWidth: 40
               }}>
                 {item.icon}
               </ListItemIcon>
-              <ListItemText 
-                primary={item.text} 
-                sx={{ 
-                  '& .MuiTypography-root': { 
-                    fontWeight: location.pathname === item.path ? 'bold' : 'medium' 
-                  } 
-                }} 
+              <ListItemText
+                primary={item.text}
+                sx={{
+                  '& .MuiTypography-root': {
+                    fontWeight: location.pathname === item.path ? 'bold' : 'medium'
+                  }
+                }}
               />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
+      {/* Sidebar Links */}
+
+      {/* Sidebar footer */}
       <Box sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider' }}>
         <Typography variant="caption" color="text.secondary" align="center" display="block">
           TaskTrack v1.0
         </Typography>
       </Box>
+      {/* Sidebar footer */}
+
     </Box>
   );
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
+
+      {/* Navbar */}
       <AppBar
         position="fixed"
         sx={{
@@ -141,6 +168,7 @@ const Layout: React.FC = () => {
         }}
       >
         <Toolbar>
+          {/* Hamburger */}
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -150,10 +178,45 @@ const Layout: React.FC = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          {/* Hamburger */}
+
+          {/* Page header */}
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {menuItems.find(item => item.path === location.pathname)?.text || 'Anasayfa'}
           </Typography>
-          
+          {/* Page header */}
+
+          {location.pathname === "/calendar" ?
+            <Box display="flex" alignItems="center" sx={{ flexGrow: 1 }}>
+              <Tooltip title="Bugün">
+                <IconButton
+                  onClick={handleToday}
+                  color="inherit">
+                  <TodayIcon />
+                </IconButton>
+              </Tooltip>
+
+              <IconButton
+                onClick={handlePreviousMonth}
+                color="inherit"
+              >
+                <ChevronLeft />
+              </IconButton>
+
+              <Typography variant="h6" sx={{ minWidth: 200, textAlign: 'center' }}>
+                {format(currentDate, 'MMMM yyyy', { locale: tr })}
+              </Typography>
+
+              <IconButton
+                onClick={handleNextMonth}
+                color="inherit"
+              >
+                <ChevronRight />
+              </IconButton>
+            </Box>
+            :
+            <></>}
+
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {user && (
               <>
@@ -232,8 +295,8 @@ const Layout: React.FC = () => {
       </Box>
       <Box
         component="main"
-        sx={{ 
-          flexGrow: 1, 
+        sx={{
+          flexGrow: 1,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           maxWidth: { sm: `calc(100% - ${drawerWidth}px)` },
           minHeight: '100vh',
@@ -244,9 +307,9 @@ const Layout: React.FC = () => {
         }}
       >
         <Toolbar />
-        <Box sx={{ 
-          flexGrow: 1, 
-          display: 'flex', 
+        <Box sx={{
+          flexGrow: 1,
+          display: 'flex',
           flexDirection: 'column',
           width: '100%',
           maxWidth: '100%',

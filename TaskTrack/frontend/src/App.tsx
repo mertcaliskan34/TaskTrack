@@ -7,6 +7,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { tr } from 'date-fns/locale';
 
 import { AuthProvider, useAuth } from './components/AuthContext';
+import { CalendarProvider } from './context/CalendarContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -57,33 +58,35 @@ function App() {
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={tr}>
         <CssBaseline />
         <AuthProvider>
-          <Router>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              
-              {/* Protected Routes */}
-              <Route 
-                path="/" 
-                element={
-                  <ProtectedRoute>
-                    <Layout />
-                  </ProtectedRoute>
-                }
-              >
-                <Route index element={<Dashboard />} />
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="calendar" element={<Calendar />} />
-                <Route path="stats" element={<Stats />} />
-                <Route path="tasks/:id" element={<TaskDetail />} />
-                <Route path="profile" element={<Profile />} />
-              </Route>
-              
-              {/* Not Found - Redirect to Dashboard */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </Router>
+          <CalendarProvider>
+            <Router>
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+
+                {/* Protected Routes */}
+                <Route
+                  path="/"
+                  element={
+                    <ProtectedRoute>
+                      <Layout />
+                    </ProtectedRoute>
+                  }
+                >
+                  <Route index element={<Dashboard />} />
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="calendar" element={<Calendar />} />
+                  <Route path="stats" element={<Stats />} />
+                  <Route path="tasks/:id" element={<TaskDetail />} />
+                  <Route path="profile" element={<Profile />} />
+                </Route>
+
+                {/* Not Found - Redirect to Dashboard */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </Router>
+          </CalendarProvider>
         </AuthProvider>
       </LocalizationProvider>
     </ThemeProvider>
