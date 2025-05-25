@@ -163,10 +163,10 @@ const Stats: React.FC = () => {
 
   return (
     <Box sx={{ 
-      width: '100%', 
-      display: 'flex', 
-      justifyContent: 'center',
-      p: { xs: 2, sm: 3, md: 4 }
+      width: '85vw', 
+      display: 'flex',
+      justifyContent: "center",
+      mt: 5
     }}>
       <Box sx={{ 
         width: '100%', 
@@ -174,10 +174,10 @@ const Stats: React.FC = () => {
       }}>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom color="primary" fontWeight="bold">
+        <Typography variant="h4" component="h1" gutterBottom color="primary" fontWeight="bold" align="center">
           İstatistikler
         </Typography>
-        <Typography variant="body1" color="text.secondary">
+        <Typography variant="body1" color="text.secondary" align="center">
           Görev performansınızı ve ilerlemenizi takip edin
         </Typography>
       </Box>
@@ -190,7 +190,7 @@ const Stats: React.FC = () => {
 
       {/* Overview Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 3' } }}>
+        <Grid component="div" size={3}>
           <Card sx={{ background: 'linear-gradient(135deg, #2196f3 0%, #21cbf3 100%)', color: 'white' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -208,7 +208,7 @@ const Stats: React.FC = () => {
           </Card>
         </Grid>
 
-        <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 3' } }}>
+        <Grid component="div" size={3}>
           <Card sx={{ background: 'linear-gradient(135deg, #4caf50 0%, #8bc34a 100%)', color: 'white' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -226,7 +226,7 @@ const Stats: React.FC = () => {
           </Card>
         </Grid>
 
-        <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 3' } }}>
+        <Grid component="div" size={3}>
           <Card sx={{ background: 'linear-gradient(135deg, #ff9800 0%, #ffc107 100%)', color: 'white' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -244,7 +244,7 @@ const Stats: React.FC = () => {
           </Card>
         </Grid>
 
-        <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 6', md: 'span 3' } }}>
+        <Grid component="div" size={3}>
           <Card sx={{ background: 'linear-gradient(135deg, #757575 0%, #9e9e9e 100%)', color: 'white' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -263,9 +263,9 @@ const Stats: React.FC = () => {
         </Grid>
       </Grid>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={2}>
         {/* Completion Rate */}
-        <Grid component="div" sx={{ gridColumn: { xs: 'span 12', md: 'span 6' } }}>
+        <Grid component="div" size={3}>
           <Paper elevation={3} sx={{ p: 3, height: 'fit-content' }}>
             <Typography variant="h6" gutterBottom fontWeight="bold">
               Tamamlanma Oranı
@@ -298,7 +298,7 @@ const Stats: React.FC = () => {
         </Grid>
 
         {/* Task Types */}
-        <Grid component="div" sx={{ gridColumn: { xs: 'span 12', md: 'span 6' } }}>
+        <Grid component="div" size={3}>
           <Paper elevation={3} sx={{ p: 3, height: 'fit-content' }}>
             <Typography variant="h6" gutterBottom fontWeight="bold">
               Görev Türleri
@@ -332,7 +332,7 @@ const Stats: React.FC = () => {
         </Grid>
 
         {/* Recent Performance */}
-        <Grid component="div" sx={{ gridColumn: { xs: 'span 12', md: 'span 6' } }}>
+        <Grid component="div" size={3}>
           <Paper elevation={3} sx={{ p: 3, height: 'fit-content' }}>
             <Typography variant="h6" gutterBottom fontWeight="bold">
               Son Performans
@@ -370,7 +370,7 @@ const Stats: React.FC = () => {
         </Grid>
 
         {/* Status Distribution */}
-        <Grid component="div" sx={{ gridColumn: { xs: 'span 12', md: 'span 6' } }}>
+        <Grid component="div" size={3}>
           <Paper elevation={3} sx={{ p: 3, height: 'fit-content' }}>
             <Typography variant="h6" gutterBottom fontWeight="bold">
               Durum Dağılımı
