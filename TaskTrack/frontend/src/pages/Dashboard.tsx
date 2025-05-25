@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
- 
-import { 
-  Typography, 
-  Grid, 
-  Card, 
-  CardContent, 
-  Box, 
-  Chip, 
-  Button, 
+
+import {
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  Box,
+  Chip,
+  Button,
   IconButton,
   CircularProgress,
   Paper,
@@ -15,7 +15,7 @@ import {
   Tab,
   Alert
 } from '@mui/material';
-import { 
+import {
   Add as AddIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
@@ -88,7 +88,7 @@ const Dashboard: React.FC = () => {
   }, []);
 
   // Tab değişimi
-  const handleTabChange = (  _event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
@@ -210,9 +210,9 @@ const Dashboard: React.FC = () => {
   // Tarih bilgisini formatlama
   const formatDate = (dateString: string | undefined) => {
     if (!dateString) return 'Tarih belirtilmemiş';
-    
+
     const date = parseISO(dateString);
-    
+
     if (isToday(date)) {
       return 'Bugün';
     } else if (isTomorrow(date)) {
@@ -229,53 +229,49 @@ const Dashboard: React.FC = () => {
 
   const renderTaskCard = (task: Task) => {
     const isPastDue = task.due_date ? isPast(parseISO(task.due_date)) && task.status !== 'completed' : false;
-    
+
     return (
-      <Grid 
-        component="div" 
-        sx={{ 
-          gridColumn: { 
-            xs: 'span 12', 
-            sm: 'span 6', 
-            md: 'span 4' 
-          } 
-        }} 
+      <Grid
+        component="div"
+        size={4}
         key={task._id || task.task_id}
       >
-        <Card 
-          sx={{ 
-            height: '100%', 
-            display: 'flex', 
+        <Card
+          sx={{
+            display: 'flex',
             flexDirection: 'column',
-            borderLeft: isPastDue ? '4px solid #f44336' : undefined
+            borderLeft: isPastDue ? '4px solid #f44336' : undefined,
           }}
         >
           <CardContent sx={{ flexGrow: 1 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-              <Chip 
-                icon={getTaskTypeIcon(task.task_type)} 
-                label={getTaskTypeText(task.task_type)} 
-                size="small" 
-                color="primary" 
-                variant="outlined" 
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}>
+              <Chip
+                icon={getTaskTypeIcon(task.task_type)}
+                label={getTaskTypeText(task.task_type)}
+                size="medium"
+                color="primary"
+                variant="outlined"
               />
-              <Chip 
-                label={getStatusText(task.status, isPastDue)} 
-                size="small" 
+              <Chip
+                label={getStatusText(task.status, isPastDue)}
+                size="medium"
                 color={getStatusColor(task.status, isPastDue)}
               />
             </Box>
-            
+
             <Typography variant="h6" component="h2" gutterBottom>
               {task.title}
             </Typography>
-            
+
             {task.description && (
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                 {task.description}
               </Typography>
             )}
-            
+
             <Typography variant="body2" color={isPastDue ? "error" : "text.secondary"}>
               {task.due_date ? (
                 <>Teslim: {formatDate(task.due_date)}</>
@@ -284,11 +280,11 @@ const Dashboard: React.FC = () => {
               )}
             </Typography>
           </CardContent>
-          
+
           <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
             <Box>
               {task.status !== 'completed' && (
-                <IconButton 
+                <IconButton
                   size="small"
                   onClick={() => {
                     const taskId = task._id || task.task_id;
@@ -301,7 +297,7 @@ const Dashboard: React.FC = () => {
                 </IconButton>
               )}
               {task.status === 'completed' && (
-                <IconButton 
+                <IconButton
                   size="small"
                   onClick={() => {
                     const taskId = task._id || task.task_id;
@@ -315,15 +311,15 @@ const Dashboard: React.FC = () => {
               )}
             </Box>
             <Box>
-              <IconButton 
-                size="small" 
+              <IconButton
+                size="small"
                 onClick={() => handleEditTask(task)}
                 title="Düzenle"
               >
                 <EditIcon />
               </IconButton>
-              <IconButton 
-                size="small" 
+              <IconButton
+                size="small"
                 onClick={() => {
                   const taskId = task._id || task.task_id;
                   if (taskId) handleDeleteTask(taskId);
@@ -349,136 +345,133 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <Box sx={{ 
-      width: '100%', 
-      maxWidth: '100%', 
-      mx: 'auto', 
-      p: { xs: 2, sm: 3 },
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: '100%',
-      alignItems: 'center'
+    // Wrapper
+    <Box sx={{
+      ml: "2em",
+      mt: "2em",
+      width: '80vw',
+      maxWidth: '1400px',
+      flexGrow: 1,
     }}>
-      <Box sx={{ 
-        width: '100%', 
-        maxWidth: '1400px',
+      <Box sx={{
+        width: '100%',
         display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-      }}>
-      {/* Header Section */}
-      <Box sx={{ 
-        mb: 4, 
-        p: 3, 
-        background: 'linear-gradient(135deg, #2196f3 0%, #21cbf3 100%)',
-        borderRadius: 2,
-        color: 'white',
-        display: 'flex',
-        justifyContent: 'space-between',
+        flexDirection: 'row',
         alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: 2,
-        width: '100%'
+        mb: 3
       }}>
-        <Box>
-          <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
-            Merhaba, {user?.username}!
-          </Typography>
-          <Typography variant="body1" sx={{ opacity: 0.9 }}>
-            Bugün {new Date().toLocaleDateString('tr-TR', { 
-              weekday: 'long', 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
-            })}
-          </Typography>
+        {/* Header Section */}
+        <Box sx={{
+          p: 2,
+          background: 'linear-gradient(135deg, #2196f3 0%, #21cbf3 100%)',
+          borderRadius: 2,
+          color: 'white',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          width: '100%'
+        }}>
+          <Box>
+            <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
+              Merhaba, {user?.username}!
+            </Typography>
+            <Typography variant="body1" sx={{ opacity: 0.9 }}>
+              Bugün {new Date().toLocaleDateString('tr-TR', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </Typography>
+          </Box>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleAddTask}
+            sx={{
+              bgcolor: 'rgba(255,255,255,0.2)',
+              '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' },
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.3)'
+            }}
+          >
+            Yeni Görev
+          </Button>
         </Box>
-        <Button 
-          variant="contained" 
-          startIcon={<AddIcon />}
-          onClick={handleAddTask}
-          sx={{ 
-            bgcolor: 'rgba(255,255,255,0.2)', 
-            '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' },
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255,255,255,0.3)'
-          }}
-        >
-          Yeni Görev
-        </Button>
-      </Box>
 
-      {/* Quick Stats */}
-      <Box sx={{ mb: 4, width: '100%', display: 'flex', justifyContent: 'center' }}>
-        <Grid container spacing={3} sx={{ width: '100%', m: 0, justifyContent: 'center' }}>
-          <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 4' } }}>
-            <Paper sx={{ 
-              p: 3, 
-              textAlign: 'center', 
-              bgcolor: '#fff3e0',
-              borderRadius: 2,
-              boxShadow: 2,
-              transition: 'transform 0.2s ease-in-out',
-              '&:hover': {
-                transform: 'translateY(-2px)',
-                boxShadow: 4
-              }
-            }}>
-              <Typography variant="h3" color="#ff9800" fontWeight="bold">
-                {pendingTasks.length}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" fontWeight="medium">
-                Bekleyen Görev
-              </Typography>
-            </Paper>
+        {/* Quick Stats */}
+        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+          <Grid container spacing={3} sx={{ width: '100%', m: 0, justifyContent: 'center' }}>
+            <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 4' } }}>
+              <Paper sx={{
+                p: 2,
+                textAlign: 'center',
+                bgcolor: '#fff3e0',
+                borderRadius: 2,
+                boxShadow: 2,
+                transition: 'transform 0.2s ease-in-out',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  boxShadow: 4
+                }
+              }}>
+                <Typography variant="h3" color="#ff9800" fontWeight="bold">
+                  {pendingTasks.length}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" fontWeight="medium">
+                  Bekleyen Görev
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 4', } }}>
+              <Paper sx={{
+                p: 2,
+                textAlign: 'center',
+                bgcolor: '#e3f2fd',
+                borderRadius: 2,
+                boxShadow: 2,
+                transition: 'transform 0.2s ease-in-out',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  boxShadow: 4
+                }
+              }}>
+                <Typography variant="h3" color="#2196f3" fontWeight="bold">
+                  {inProgressTasks.length}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" fontWeight="medium">
+                  Devam Eden
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 4' } }}>
+              <Paper sx={{
+                p: 2,
+                textAlign: 'center',
+                bgcolor: '#e8f5e8',
+                borderRadius: 2,
+                boxShadow: 2,
+                transition: 'transform 0.2s ease-in-out',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  boxShadow: 4
+                }
+              }}>
+                <Typography variant="h3" color="#4caf50" fontWeight="bold">
+                  {completedTasks.length}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" fontWeight="medium">
+                  Tamamlanan
+                </Typography>
+              </Paper>
+            </Grid>
           </Grid>
-          <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 4' } }}>
-            <Paper sx={{ 
-              p: 3, 
-              textAlign: 'center', 
-              bgcolor: '#e3f2fd',
-              borderRadius: 2,
-              boxShadow: 2,
-              transition: 'transform 0.2s ease-in-out',
-              '&:hover': {
-                transform: 'translateY(-2px)',
-                boxShadow: 4
-              }
-            }}>
-              <Typography variant="h3" color="#2196f3" fontWeight="bold">
-                {inProgressTasks.length}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" fontWeight="medium">
-                Devam Eden
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 4' } }}>
-            <Paper sx={{ 
-              p: 3, 
-              textAlign: 'center', 
-              bgcolor: '#e8f5e8',
-              borderRadius: 2,
-              boxShadow: 2,
-              transition: 'transform 0.2s ease-in-out',
-              '&:hover': {
-                transform: 'translateY(-2px)',
-                boxShadow: 4
-              }
-            }}>
-              <Typography variant="h3" color="#4caf50" fontWeight="bold">
-                {completedTasks.length}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" fontWeight="medium">
-                Tamamlanan
-              </Typography>
-            </Paper>
-          </Grid>
-        </Grid>
+        </Box>
       </Box>
 
       {/* Tabs Section */}
-      <Paper elevation={3} sx={{ mb: 4, borderRadius: 2, overflow: 'hidden', width: '100%' }}>
+      <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', width: '100%' }}>
         <Tabs
           value={tabValue}
           onChange={handleTabChange}
@@ -512,11 +505,11 @@ const Dashboard: React.FC = () => {
       )}
 
       <TaskTabPanel value={tabValue} index={0}>
-        <Grid container spacing={3} sx={{ width: '100%', m: 0, justifyContent: 'center' }}>
+        <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
           {pendingTasks.length > 0 ? (
             pendingTasks.map(renderTaskCard)
           ) : (
-            <Grid component="div" sx={{ gridColumn: 'span 12' }}>
+            <Grid component="div">
               <Typography variant="body1" color="text.secondary" align="center">
                 Bekleyen görev bulunmuyor.
               </Typography>
@@ -526,7 +519,7 @@ const Dashboard: React.FC = () => {
       </TaskTabPanel>
 
       <TaskTabPanel value={tabValue} index={1}>
-        <Grid container spacing={3} sx={{ width: '100%', m: 0, justifyContent: 'center' }}>
+        <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
           {inProgressTasks.length > 0 ? (
             inProgressTasks.map(renderTaskCard)
           ) : (
@@ -540,7 +533,7 @@ const Dashboard: React.FC = () => {
       </TaskTabPanel>
 
       <TaskTabPanel value={tabValue} index={2}>
-        <Grid container spacing={3} sx={{ width: '100%', m: 0, justifyContent: 'center' }}>
+        <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
           {completedTasks.length > 0 ? (
             completedTasks.map(renderTaskCard)
           ) : (
@@ -560,7 +553,6 @@ const Dashboard: React.FC = () => {
         initialData={currentTask}
         mode={currentTask ? 'edit' : 'create'}
       />
-      </Box>
     </Box>
   );
 };
