@@ -12,6 +12,8 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import TaskDetail from './pages/TaskDetail';
 import Profile from './pages/Profile';
+import Calendar from './pages/Calendar';
+import Stats from './pages/Stats';
 import Layout from './components/Layout';
 
 // Özel tema oluşturma
@@ -72,6 +74,8 @@ function App() {
               >
                 <Route index element={<Dashboard />} />
                 <Route path="dashboard" element={<Dashboard />} />
+                <Route path="calendar" element={<Calendar />} />
+                <Route path="stats" element={<Stats />} />
                 <Route path="tasks/:id" element={<TaskDetail />} />
                 <Route path="profile" element={<Profile />} />
               </Route>

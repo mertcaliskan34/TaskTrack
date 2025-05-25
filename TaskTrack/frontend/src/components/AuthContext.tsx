@@ -36,15 +36,46 @@ export const AuthContext = createContext<AuthContextType>({
 // Context provider
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Başlangıçta localStorage'dan kullanıcı kontrolü
+  // Başlangıçta localStorage'dan kullanıcı kontrolü ve token doğrulama
   useEffect(() => {
-    const currentUser = authService.getCurrentUser();
-    if (currentUser) {
-      setUser(currentUser);
-    }
+    const initializeAuth = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const currentUser = authService.getCurrentUser();
+        
+        if (token && currentUser) {
+          // Token'ı doğrulamak için basit bir API çağrısı yap
+          try {
+            const response = await axios.get('http://localhost:3001/api/users/profile', {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+            
+            // Token geçerliyse kullanıcıyı ayarla
+            if (response.data.user) {
+              setUser(response.data.user);
+              // localStorage'daki kullanıcı bilgisini güncelle
+              localStorage.setItem('user', JSON.stringify(response.data.user));
+            }
+                     } catch (tokenError) {
+             // Token geçersizse temizle
+             console.log('Token expired or invalid, clearing auth data', tokenError);
+             authService.logout();
+             setUser(null);
+           }
+        }
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        authService.logout();
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeAuth();
   }, []);
 
   // Hata temizleme

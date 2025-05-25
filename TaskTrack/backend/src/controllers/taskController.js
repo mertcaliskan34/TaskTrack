@@ -69,6 +69,27 @@ const getUserTasks = async (req, res) => {
   }
 };
 
+// Belirli kullanıcının görevlerini getirme (ID ile)
+const getUserTasksById = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const requestingUserId = req.user.id;
+    
+    // Kullanıcı sadece kendi görevlerini görebilir
+    if (userId !== requestingUserId.toString()) {
+      return res.status(403).json({ message: 'Bu kullanıcının görevlerine erişim yetkiniz yok' });
+    }
+    
+    // Tüm görevleri getir
+    const tasks = await Task.findByUserId(userId);
+
+    res.status(200).json(tasks);
+  } catch (error) {
+    console.error('Görevleri getirme hatası:', error);
+    res.status(500).json({ message: 'Görevler getirilemedi', error: error.message });
+  }
+};
+
 // Belirli bir görevi getirme
 const getTaskById = async (req, res) => {
   try {
@@ -84,7 +105,7 @@ const getTaskById = async (req, res) => {
     }
 
     // Görevin kullanıcıya ait olduğunu kontrol et
-    if (task.user_id !== userId) {
+    if (task.user_id.toString() !== userId.toString()) {
       return res.status(403).json({ message: 'Bu göreve erişim yetkiniz yok' });
     }
 
@@ -111,7 +132,7 @@ const updateTask = async (req, res) => {
     }
 
     // Görevin kullanıcıya ait olduğunu kontrol et
-    if (task.user_id !== userId) {
+    if (task.user_id.toString() !== userId.toString()) {
       return res.status(403).json({ message: 'Bu görevi güncelleme yetkiniz yok' });
     }
 
@@ -164,7 +185,7 @@ const updateTaskStatus = async (req, res) => {
     }
 
     // Görevin kullanıcıya ait olduğunu kontrol et
-    if (task.user_id !== userId) {
+    if (task.user_id.toString() !== userId.toString()) {
       return res.status(403).json({ message: 'Bu görevi güncelleme yetkiniz yok' });
     }
 
@@ -202,7 +223,7 @@ const deleteTask = async (req, res) => {
     }
 
     // Görevin kullanıcıya ait olduğunu kontrol et
-    if (task.user_id !== userId) {
+    if (task.user_id.toString() !== userId.toString()) {
       return res.status(403).json({ message: 'Bu görevi silme yetkiniz yok' });
     }
 
@@ -222,6 +243,7 @@ const deleteTask = async (req, res) => {
 module.exports = {
   createTask,
   getUserTasks,
+  getUserTasksById,
   getTaskById,
   updateTask,
   updateTaskStatus,

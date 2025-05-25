@@ -14,6 +14,7 @@ router.use(authMiddleware);
 // Görev rotaları
 router.post('/', taskController.createTask);
 router.get('/', taskController.getUserTasks);
+router.get('/user/:userId', taskController.getUserTasksById);
 router.get('/:id', taskController.getTaskById);
 router.put('/:id', taskController.updateTask);
 router.patch('/:id/status', taskController.updateTaskStatus);

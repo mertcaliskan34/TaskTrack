@@ -41,9 +41,10 @@ const UserModel = {
       if (!user) return null;
       
       return {
-        user_id: user._id,
+        _id: user._id,
         username: user.username,
         email: user.email,
+        password: user.password,
         created_at: user.created_at
       };
     } catch (error) {

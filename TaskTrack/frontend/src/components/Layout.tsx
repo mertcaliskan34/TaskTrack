@@ -14,7 +14,6 @@ import {
   ListItemText, 
   Toolbar, 
   Typography, 
-  Container,
   Menu,
   MenuItem,
   Avatar
@@ -22,14 +21,13 @@ import {
 import {
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
-  Assignment as AssignmentIcon,
   CalendarMonth as CalendarIcon,
   BarChart as BarChartIcon,
   AccountCircle as AccountCircleIcon,
   Logout as LogoutIcon
 } from '@mui/icons-material';
 import { useAuth } from './AuthContext';
-import Outlet from '@mui/icons-material/Outlet';
+import { Outlet } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -65,36 +63,71 @@ const Layout: React.FC = () => {
   };
 
   const menuItems = [
-    { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-    { text: 'Görevlerim', icon: <AssignmentIcon />, path: '/tasks' },
+    { text: 'Anasayfa', icon: <DashboardIcon />, path: '/dashboard' },
     { text: 'Takvim', icon: <CalendarIcon />, path: '/calendar' },
     { text: 'İstatistikler', icon: <BarChartIcon />, path: '/stats' },
   ];
 
   const drawer = (
-    <div>
-      <Toolbar>
-        <Typography variant="h6" noWrap component="div">
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Toolbar sx={{ 
+        background: 'linear-gradient(135deg, #2196f3 0%, #21cbf3 100%)',
+        color: 'white'
+      }}>
+        <Typography variant="h6" noWrap component="div" fontWeight="bold">
           TaskTrack
         </Typography>
       </Toolbar>
       <Divider />
-      <List>
+      <List sx={{ flexGrow: 1, pt: 2 }}>
         {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
+          <ListItem key={item.text} disablePadding sx={{ mb: 1, px: 2 }}>
             <ListItemButton 
               selected={location.pathname === item.path}
               onClick={() => navigate(item.path)}
+              sx={{
+                borderRadius: 2,
+                '&.Mui-selected': {
+                  bgcolor: 'primary.main',
+                  color: 'white',
+                  '&:hover': {
+                    bgcolor: 'primary.dark',
+                  },
+                  '& .MuiListItemIcon-root': {
+                    color: 'white',
+                  },
+                },
+                '&:hover': {
+                  bgcolor: 'action.hover',
+                  borderRadius: 2,
+                },
+                transition: 'all 0.2s ease-in-out',
+              }}
             >
-              <ListItemIcon>
+              <ListItemIcon sx={{ 
+                color: location.pathname === item.path ? 'white' : 'primary.main',
+                minWidth: 40 
+              }}>
                 {item.icon}
               </ListItemIcon>
-              <ListItemText primary={item.text} />
+              <ListItemText 
+                primary={item.text} 
+                sx={{ 
+                  '& .MuiTypography-root': { 
+                    fontWeight: location.pathname === item.path ? 'bold' : 'medium' 
+                  } 
+                }} 
+              />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
-    </div>
+      <Box sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider' }}>
+        <Typography variant="caption" color="text.secondary" align="center" display="block">
+          TaskTrack v1.0
+        </Typography>
+      </Box>
+    </Box>
   );
 
   return (
@@ -118,7 +151,7 @@ const Layout: React.FC = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            {menuItems.find(item => item.path === location.pathname)?.text || 'Dashboard'}
+            {menuItems.find(item => item.path === location.pathname)?.text || 'Anasayfa'}
           </Typography>
           
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -201,16 +234,26 @@ const Layout: React.FC = () => {
         component="main"
         sx={{ 
           flexGrow: 1, 
-          p: 3, 
           width: { sm: `calc(100% - ${drawerWidth}px)` },
+          maxWidth: { sm: `calc(100% - ${drawerWidth}px)` },
           minHeight: '100vh',
-          bgcolor: 'background.default'
+          bgcolor: 'background.default',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden'
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Box sx={{ 
+          flexGrow: 1, 
+          display: 'flex', 
+          flexDirection: 'column',
+          width: '100%',
+          maxWidth: '100%',
+          overflow: 'auto'
+        }}>
           <Outlet />
-        </Container>
+        </Box>
       </Box>
     </Box>
   );

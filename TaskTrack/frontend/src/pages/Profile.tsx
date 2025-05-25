@@ -8,8 +8,16 @@ import {
   Paper,
   Alert,
   CircularProgress,
-  Divider
+  Divider,
+  Avatar,
+  Container
 } from '@mui/material';
+import {
+  Person as PersonIcon,
+  Lock as LockIcon,
+  Save as SaveIcon,
+  Edit as EditIcon
+} from '@mui/icons-material';
 import { useAuth } from '../components/AuthContext';
 import { authService } from '../services/api';
 
@@ -124,35 +132,60 @@ const Profile: React.FC = () => {
 
   if (authLoading || !user) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-        <CircularProgress />
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+        <CircularProgress size={60} />
       </Box>
     );
   }
 
   return (
-    <Box>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Profil Ayarları
-      </Typography>
-      
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      {/* Header Section */}
+      <Box sx={{ mb: 4, textAlign: 'center' }}>
+        <Avatar 
+          sx={{ 
+            width: 100, 
+            height: 100, 
+            bgcolor: 'primary.main',
+            fontSize: '2.5rem',
+            fontWeight: 'bold',
+            mx: 'auto',
+            mb: 2
+          }}
+        >
+          {user.username.charAt(0).toUpperCase()}
+        </Avatar>
+        <Typography variant="h4" component="h1" gutterBottom color="primary" fontWeight="bold">
+          {user.username}
+        </Typography>
+        <Typography variant="body1" color="text.secondary" gutterBottom>
+          {user.email}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Üyelik Tarihi: {new Date(user.created_at).toLocaleDateString('tr-TR')}
+        </Typography>
+      </Box>
+
       <Grid container spacing={4}>
         {/* Profil Bilgileri */}
         <Grid component="div" sx={{ gridColumn: { xs: 'span 12', md: 'span 6' } }}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Hesap Bilgileri
-            </Typography>
+          <Paper elevation={3} sx={{ p: 4, height: 'fit-content' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+              <PersonIcon sx={{ mr: 2, color: 'primary.main', fontSize: 28 }} />
+              <Typography variant="h6" fontWeight="bold">
+                Hesap Bilgileri
+              </Typography>
+            </Box>
             <Divider sx={{ mb: 3 }} />
             
             {profileError && (
-              <Alert severity="error" sx={{ mb: 2 }}>
+              <Alert severity="error" sx={{ mb: 3 }}>
                 {profileError}
               </Alert>
             )}
             
             {profileSuccess && (
-              <Alert severity="success" sx={{ mb: 2 }}>
+              <Alert severity="success" sx={{ mb: 3 }}>
                 {profileSuccess}
               </Alert>
             )}
@@ -168,6 +201,8 @@ const Profile: React.FC = () => {
                 value={profileState.username}
                 onChange={handleProfileChange}
                 disabled={profileLoading}
+                variant="outlined"
+                sx={{ mb: 2 }}
               />
               
               <TextField
@@ -181,15 +216,20 @@ const Profile: React.FC = () => {
                 value={profileState.email}
                 onChange={handleProfileChange}
                 disabled={profileLoading}
+                variant="outlined"
+                sx={{ mb: 3 }}
               />
               
               <Button
                 type="submit"
                 variant="contained"
-                sx={{ mt: 3 }}
+                size="large"
+                startIcon={profileLoading ? <CircularProgress size={20} color="inherit" /> : <SaveIcon />}
                 disabled={profileLoading}
+                fullWidth
+                sx={{ py: 1.5 }}
               >
-                {profileLoading ? <CircularProgress size={24} /> : 'Bilgileri Güncelle'}
+                {profileLoading ? 'Güncelleniyor...' : 'Bilgileri Güncelle'}
               </Button>
             </Box>
           </Paper>
@@ -197,20 +237,23 @@ const Profile: React.FC = () => {
         
         {/* Şifre Değiştirme */}
         <Grid component="div" sx={{ gridColumn: { xs: 'span 12', md: 'span 6' } }}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Şifre Değiştir
-            </Typography>
+          <Paper elevation={3} sx={{ p: 4, height: 'fit-content' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+              <LockIcon sx={{ mr: 2, color: 'primary.main', fontSize: 28 }} />
+              <Typography variant="h6" fontWeight="bold">
+                Güvenlik
+              </Typography>
+            </Box>
             <Divider sx={{ mb: 3 }} />
             
             {passwordError && (
-              <Alert severity="error" sx={{ mb: 2 }}>
+              <Alert severity="error" sx={{ mb: 3 }}>
                 {passwordError}
               </Alert>
             )}
             
             {passwordSuccess && (
-              <Alert severity="success" sx={{ mb: 2 }}>
+              <Alert severity="success" sx={{ mb: 3 }}>
                 {passwordSuccess}
               </Alert>
             )}
@@ -227,6 +270,8 @@ const Profile: React.FC = () => {
                 value={passwordState.currentPassword}
                 onChange={handlePasswordChange}
                 disabled={passwordLoading}
+                variant="outlined"
+                sx={{ mb: 2 }}
               />
               
               <TextField
@@ -240,6 +285,8 @@ const Profile: React.FC = () => {
                 value={passwordState.newPassword}
                 onChange={handlePasswordChange}
                 disabled={passwordLoading}
+                variant="outlined"
+                sx={{ mb: 2 }}
               />
               
               <TextField
@@ -253,22 +300,27 @@ const Profile: React.FC = () => {
                 value={passwordState.confirmPassword}
                 onChange={handlePasswordChange}
                 disabled={passwordLoading}
+                variant="outlined"
+                sx={{ mb: 3 }}
               />
               
               <Button
                 type="submit"
                 variant="contained"
-                sx={{ mt: 3 }}
+                size="large"
+                startIcon={passwordLoading ? <CircularProgress size={20} color="inherit" /> : <EditIcon />}
                 disabled={passwordLoading}
+                fullWidth
+                sx={{ py: 1.5 }}
               >
-                {passwordLoading ? <CircularProgress size={24} /> : 'Şifreyi Değiştir'}
+                {passwordLoading ? 'Değiştiriliyor...' : 'Şifreyi Değiştir'}
               </Button>
             </Box>
           </Paper>
         </Grid>
       </Grid>
-    </Box>
+    </Container>
   );
 };
 
-export default Profile; 
+export default Profile;

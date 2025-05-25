@@ -12,7 +12,8 @@ import {
   CircularProgress,
   Paper,
   Tabs,
-  Tab
+  Tab,
+  Alert
 } from '@mui/material';
 import { 
   Add as AddIcon,
@@ -104,7 +105,7 @@ const Dashboard: React.FC = () => {
   };
 
   // Görev silme
-  const handleDeleteTask = async (taskId: number) => {
+  const handleDeleteTask = async (taskId: string | number) => {
     if (window.confirm('Bu görevi silmek istediğinize emin misiniz?')) {
       try {
         await taskService.deleteTask(taskId.toString());
@@ -116,7 +117,7 @@ const Dashboard: React.FC = () => {
   };
 
   // Görev durumunu güncelle
-  const handleUpdateTaskStatus = async (taskId: number, status: 'pending' | 'in_progress' | 'completed') => {
+  const handleUpdateTaskStatus = async (taskId: string | number, status: 'pending' | 'in_progress' | 'completed') => {
     try {
       await taskService.updateTaskStatus(taskId.toString(), status);
       fetchTasks(); // Görevleri yeniden yükle
@@ -130,7 +131,10 @@ const Dashboard: React.FC = () => {
     try {
       if (currentTask) {
         // Düzenleme
-        await taskService.updateTask(currentTask.task_id.toString(), taskData as Partial<TaskCreateData>);
+        const taskId = currentTask._id || currentTask.task_id;
+        if (taskId) {
+          await taskService.updateTask(taskId.toString(), taskData as Partial<TaskCreateData>);
+        }
       } else {
         // Yeni
         await taskService.createTask(taskData as TaskCreateData);
@@ -230,7 +234,7 @@ const Dashboard: React.FC = () => {
             md: 'span 4' 
           } 
         }} 
-        key={task.task_id}
+        key={task._id || task.task_id}
       >
         <Card 
           sx={{ 
@@ -280,7 +284,10 @@ const Dashboard: React.FC = () => {
               {task.status !== 'completed' && (
                 <IconButton 
                   size="small"
-                  onClick={() => handleUpdateTaskStatus(task.task_id, 'completed')}
+                  onClick={() => {
+                    const taskId = task._id || task.task_id;
+                    if (taskId) handleUpdateTaskStatus(taskId, 'completed');
+                  }}
                   color="success"
                   title="Tamamlandı olarak işaretle"
                 >
@@ -290,7 +297,10 @@ const Dashboard: React.FC = () => {
               {task.status === 'completed' && (
                 <IconButton 
                   size="small"
-                  onClick={() => handleUpdateTaskStatus(task.task_id, 'pending')}
+                  onClick={() => {
+                    const taskId = task._id || task.task_id;
+                    if (taskId) handleUpdateTaskStatus(taskId, 'pending');
+                  }}
                   color="warning"
                   title="Bekliyor olarak işaretle"
                 >
@@ -308,7 +318,10 @@ const Dashboard: React.FC = () => {
               </IconButton>
               <IconButton 
                 size="small" 
-                onClick={() => handleDeleteTask(task.task_id)}
+                onClick={() => {
+                  const taskId = task._id || task.task_id;
+                  if (taskId) handleDeleteTask(taskId);
+                }}
                 color="error"
                 title="Sil"
               >
@@ -330,26 +343,154 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Typography variant="h4" component="h1">
-          Merhaba, {user?.username}
-        </Typography>
+    <Box sx={{ 
+      width: '100%', 
+      maxWidth: '100%', 
+      mx: 'auto', 
+      p: { xs: 2, sm: 3 },
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '100%',
+      alignItems: 'center'
+    }}>
+      <Box sx={{ 
+        width: '100%', 
+        maxWidth: '1400px',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+      {/* Header Section */}
+      <Box sx={{ 
+        mb: 4, 
+        p: 3, 
+        background: 'linear-gradient(135deg, #2196f3 0%, #21cbf3 100%)',
+        borderRadius: 2,
+        color: 'white',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: 2,
+        width: '100%'
+      }}>
+        <Box>
+          <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
+            Merhaba, {user?.username}!
+          </Typography>
+          <Typography variant="body1" sx={{ opacity: 0.9 }}>
+            Bugün {new Date().toLocaleDateString('tr-TR', { 
+              weekday: 'long', 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}
+          </Typography>
+        </Box>
         <Button 
           variant="contained" 
           startIcon={<AddIcon />}
           onClick={handleAddTask}
+          sx={{ 
+            bgcolor: 'rgba(255,255,255,0.2)', 
+            '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' },
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255,255,255,0.3)'
+          }}
         >
           Yeni Görev
         </Button>
       </Box>
 
-      <Paper sx={{ width: '100%', mb: 4 }}>
+      {/* Quick Stats */}
+      <Box sx={{ mb: 4, width: '100%' }}>
+        <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
+          <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 4' } }}>
+            <Paper sx={{ 
+              p: 3, 
+              textAlign: 'center', 
+              bgcolor: '#fff3e0',
+              borderRadius: 2,
+              boxShadow: 2,
+              transition: 'transform 0.2s ease-in-out',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: 4
+              }
+            }}>
+              <Typography variant="h3" color="#ff9800" fontWeight="bold">
+                {pendingTasks.length}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" fontWeight="medium">
+                Bekleyen Görev
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 4' } }}>
+            <Paper sx={{ 
+              p: 3, 
+              textAlign: 'center', 
+              bgcolor: '#e3f2fd',
+              borderRadius: 2,
+              boxShadow: 2,
+              transition: 'transform 0.2s ease-in-out',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: 4
+              }
+            }}>
+              <Typography variant="h3" color="#2196f3" fontWeight="bold">
+                {inProgressTasks.length}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" fontWeight="medium">
+                Devam Eden
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid component="div" sx={{ gridColumn: { xs: 'span 12', sm: 'span 4' } }}>
+            <Paper sx={{ 
+              p: 3, 
+              textAlign: 'center', 
+              bgcolor: '#e8f5e8',
+              borderRadius: 2,
+              boxShadow: 2,
+              transition: 'transform 0.2s ease-in-out',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: 4
+              }
+            }}>
+              <Typography variant="h3" color="#4caf50" fontWeight="bold">
+                {completedTasks.length}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" fontWeight="medium">
+                Tamamlanan
+              </Typography>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Box>
+
+      {/* Tabs Section */}
+      <Paper elevation={3} sx={{ mb: 4, borderRadius: 2, overflow: 'hidden', width: '100%' }}>
         <Tabs
           value={tabValue}
           onChange={handleTabChange}
           aria-label="görev sekmeleri"
           variant="fullWidth"
+          sx={{
+            bgcolor: 'primary.main',
+            '& .MuiTab-root': {
+              color: 'rgba(255,255,255,0.7)',
+              fontWeight: 'bold',
+              '&.Mui-selected': {
+                color: 'white'
+              }
+            },
+            '& .MuiTabs-indicator': {
+              backgroundColor: 'white',
+              height: 3
+            }
+          }}
         >
           <Tab label={`Bekleyen (${pendingTasks.length})`} {...a11yProps(0)} />
           <Tab label={`Devam Eden (${inProgressTasks.length})`} {...a11yProps(1)} />
@@ -358,13 +499,13 @@ const Dashboard: React.FC = () => {
       </Paper>
 
       {error && (
-        <Typography color="error" sx={{ mt: 2, mb: 2 }}>
+        <Alert severity="error" sx={{ mb: 4 }}>
           {error}
-        </Typography>
+        </Alert>
       )}
 
       <TaskTabPanel value={tabValue} index={0}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
           {pendingTasks.length > 0 ? (
             pendingTasks.map(renderTaskCard)
           ) : (
@@ -378,7 +519,7 @@ const Dashboard: React.FC = () => {
       </TaskTabPanel>
 
       <TaskTabPanel value={tabValue} index={1}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
           {inProgressTasks.length > 0 ? (
             inProgressTasks.map(renderTaskCard)
           ) : (
@@ -392,7 +533,7 @@ const Dashboard: React.FC = () => {
       </TaskTabPanel>
 
       <TaskTabPanel value={tabValue} index={2}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
           {completedTasks.length > 0 ? (
             completedTasks.map(renderTaskCard)
           ) : (
@@ -412,7 +553,8 @@ const Dashboard: React.FC = () => {
         initialData={currentTask}
         mode={currentTask ? 'edit' : 'create'}
       />
-    </>
+      </Box>
+    </Box>
   );
 };
 

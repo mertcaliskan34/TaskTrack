@@ -5,8 +5,9 @@ const API_URL = 'http://localhost:3001/api';
 
 // Task type
 export interface Task {
-  task_id: number;
-  user_id: number;
+  _id?: string; // MongoDB ObjectId
+  task_id?: number; // Legacy ID field
+  user_id?: number;
   title: string;
   description?: string;
   due_date?: string;
@@ -43,6 +44,22 @@ api.interceptors.request.use(
     return config;
   },
   (error: unknown) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor - token süresi dolduğunda otomatik logout
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token süresi dolmuş veya geçersiz
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
     return Promise.reject(error);
   }
 );

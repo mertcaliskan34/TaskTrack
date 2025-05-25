@@ -6,7 +6,7 @@ const User = require('../models/userModel');
 const generateToken = (user) => {
   return jwt.sign(
     { 
-      id: user.user_id, 
+      id: user._id, 
       username: user.username,
       email: user.email
     }, 
@@ -97,7 +97,7 @@ const register = async (req, res) => {
     res.status(201).json({
       message: 'Kullanıcı başarıyla oluşturuldu',
       user: {
-        id: user.user_id,
+        id: user._id,
         username: user.username,
         email: user.email,
         created_at: user.created_at
@@ -158,7 +158,7 @@ const login = async (req, res) => {
     res.status(200).json({
       message: 'Giriş başarılı',
       user: {
-        id: user.user_id,
+        id: user._id,
         username: user.username,
         email: user.email,
         created_at: user.created_at
@@ -185,7 +185,7 @@ const getUserProfile = async (req, res) => {
 
     res.status(200).json({
       user: {
-        id: user.user_id,
+        id: user._id,
         username: user.username,
         email: user.email,
         created_at: user.created_at
