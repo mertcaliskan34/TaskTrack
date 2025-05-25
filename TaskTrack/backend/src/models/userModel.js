@@ -1,14 +1,16 @@
-const { pool } = require('../config/db');
+const User = require('./userSchema');
 
-const User = {
+const UserModel = {
   // Kullanıcı oluşturma
   async create(username, email, password) {
     try {
-      const [result] = await pool.execute(
-        'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
-        [username, email, password]
-      );
-      return result.insertId;
+      const newUser = new User({
+        username,
+        email,
+        password
+      });
+      const savedUser = await newUser.save();
+      return savedUser._id;
     } catch (error) {
       throw error;
     }
@@ -17,11 +19,7 @@ const User = {
   // Email ile kullanıcı bulma
   async findByEmail(email) {
     try {
-      const [rows] = await pool.execute(
-        'SELECT * FROM users WHERE email = ?',
-        [email]
-      );
-      return rows[0];
+      return await User.findOne({ email });
     } catch (error) {
       throw error;
     }
@@ -30,11 +28,7 @@ const User = {
   // Kullanıcı adı ile kullanıcı bulma
   async findByUsername(username) {
     try {
-      const [rows] = await pool.execute(
-        'SELECT * FROM users WHERE username = ?',
-        [username]
-      );
-      return rows[0];
+      return await User.findOne({ username });
     } catch (error) {
       throw error;
     }
@@ -43,11 +37,15 @@ const User = {
   // ID ile kullanıcı bulma
   async findById(id) {
     try {
-      const [rows] = await pool.execute(
-        'SELECT user_id, username, email, created_at FROM users WHERE user_id = ?',
-        [id]
-      );
-      return rows[0];
+      const user = await User.findById(id);
+      if (!user) return null;
+      
+      return {
+        user_id: user._id,
+        username: user.username,
+        email: user.email,
+        created_at: user.created_at
+      };
     } catch (error) {
       throw error;
     }
@@ -56,10 +54,13 @@ const User = {
   // Tüm kullanıcıları getirme
   async findAll() {
     try {
-      const [rows] = await pool.execute(
-        'SELECT user_id, username, email, created_at FROM users'
-      );
-      return rows;
+      const users = await User.find({}, 'username email created_at');
+      return users.map(user => ({
+        user_id: user._id,
+        username: user.username,
+        email: user.email,
+        created_at: user.created_at
+      }));
     } catch (error) {
       throw error;
     }
@@ -69,11 +70,8 @@ const User = {
   async update(id, userData) {
     try {
       const { username, email } = userData;
-      const [result] = await pool.execute(
-        'UPDATE users SET username = ?, email = ? WHERE user_id = ?',
-        [username, email, id]
-      );
-      return result.affectedRows > 0;
+      const result = await User.findByIdAndUpdate(id, { username, email }, { new: true });
+      return !!result;
     } catch (error) {
       throw error;
     }
@@ -82,11 +80,8 @@ const User = {
   // Şifre güncelleme
   async updatePassword(id, password) {
     try {
-      const [result] = await pool.execute(
-        'UPDATE users SET password = ? WHERE user_id = ?',
-        [password, id]
-      );
-      return result.affectedRows > 0;
+      const result = await User.findByIdAndUpdate(id, { password });
+      return !!result;
     } catch (error) {
       throw error;
     }
@@ -95,15 +90,12 @@ const User = {
   // Kullanıcı silme
   async delete(id) {
     try {
-      const [result] = await pool.execute(
-        'DELETE FROM users WHERE user_id = ?',
-        [id]
-      );
-      return result.affectedRows > 0;
+      const result = await User.findByIdAndDelete(id);
+      return !!result;
     } catch (error) {
       throw error;
     }
   }
 };
 
-module.exports = User; 
+module.exports = UserModel; 

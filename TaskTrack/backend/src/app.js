@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const { testConnection, initializeDatabase } = require('./config/db');
+const { connectDB } = require('./config/mongodb');
 
 // Routes
 const userRoutes = require('./routes/users');
@@ -42,16 +42,12 @@ app.use(express.urlencoded({ extended: true }));
 // Database setup and server start
 const startServer = async () => {
   try {
-    // Initialize database and tables
-    console.log('Initializing database and tables...');
-    await initializeDatabase();
-    
-    // Test database connection
-    console.log('Testing database connection...');
-    const dbConnected = await testConnection();
+    // Connect to MongoDB
+    console.log('Connecting to MongoDB...');
+    const dbConnected = await connectDB();
     
     if (!dbConnected) {
-      console.error('Failed to connect to database. Server will start but may not function correctly.');
+      console.error('Failed to connect to MongoDB. Server will start but may not function correctly.');
     }
     
     // Start server
@@ -71,7 +67,7 @@ app.use('/api/tasks', taskRoutes);
 
 // Basic route for testing
 app.get('/', (req, res) => {
-  res.send('TaskTrack API is running!');
+  res.send('TaskTrack API is running with MongoDB!');
 });
 
 // Error handling middleware

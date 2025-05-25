@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "migrate": "node src/scripts/migrateToMongoDB.js",
+    "mongo": "node src/scripts/startMongoApp.js",
+    "dev:mongo": "nodemon src/scripts/startMongoApp.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +19,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.14.2",
     "mysql2": "^3.14.0"
   },
   "devDependencies": {
