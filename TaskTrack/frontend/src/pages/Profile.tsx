@@ -30,24 +30,24 @@ interface ApiError {
 
 const Profile: React.FC = () => {
   const { user, loading: authLoading } = useAuth();
-  
+
   const [profileState, setProfileState] = useState({
     username: user?.username || '',
     email: user?.email || ''
   });
-  
+
   const [passwordState, setPasswordState] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
   });
-  
+
   const [profileLoading, setProfileLoading] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
-  
+
   const [profileError, setProfileError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
-  
+
   const [profileSuccess, setProfileSuccess] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
 
@@ -65,13 +65,13 @@ const Profile: React.FC = () => {
     e.preventDefault();
     setProfileError(null);
     setProfileSuccess(null);
-    
+
     // Basit validasyon
     if (!profileState.username.trim() || !profileState.email.trim()) {
       setProfileError('Lütfen tüm alanları doldurun');
       return;
     }
-    
+
     try {
       setProfileLoading(true);
       await authService.updateProfile({
@@ -91,23 +91,23 @@ const Profile: React.FC = () => {
     e.preventDefault();
     setPasswordError(null);
     setPasswordSuccess(null);
-    
+
     // Şifre validasyonu
     if (!passwordState.currentPassword || !passwordState.newPassword || !passwordState.confirmPassword) {
       setPasswordError('Lütfen tüm alanları doldurun');
       return;
     }
-    
+
     if (passwordState.newPassword !== passwordState.confirmPassword) {
       setPasswordError('Yeni şifreler eşleşmiyor');
       return;
     }
-    
+
     if (passwordState.newPassword.length < 6) {
       setPasswordError('Yeni şifre en az 6 karakter olmalıdır');
       return;
     }
-    
+
     try {
       setPasswordLoading(true);
       await authService.changePassword(
@@ -137,26 +137,26 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh',
+    <Box sx={{
       display: 'flex',
       flexDirection: 'column',
+      flexGrow: 1,
       alignItems: 'center',
       py: { xs: 2, sm: 3, md: 4 },
       px: { xs: 1, sm: 2, md: 3 },
       bgcolor: '#f5f5f5'
     }}>
       {/* Header Section */}
-      <Box sx={{ 
-        mb: { xs: 3, sm: 4 }, 
+      <Box sx={{
+        mb: { xs: 3, sm: 4 },
         textAlign: 'center',
         width: '100%',
         maxWidth: '600px'
       }}>
-        <Avatar 
-          sx={{ 
-            width: { xs: 80, sm: 90, md: 100 }, 
-            height: { xs: 80, sm: 90, md: 100 }, 
+        <Avatar
+          sx={{
+            width: { xs: 80, sm: 90, md: 100 },
+            height: { xs: 80, sm: 90, md: 100 },
             bgcolor: 'primary.main',
             fontSize: { xs: '2rem', sm: '2.25rem', md: '2.5rem' },
             fontWeight: 'bold',
@@ -166,32 +166,32 @@ const Profile: React.FC = () => {
         >
           {user.username.charAt(0).toUpperCase()}
         </Avatar>
-        <Typography 
-          variant="h4" 
-          component="h1" 
-          gutterBottom 
-          color="primary" 
+        <Typography
+          variant="h4"
+          component="h1"
+          gutterBottom
+          color="primary"
           fontWeight="bold"
-          sx={{ 
+          sx={{
             fontSize: { xs: '1.75rem', sm: '2rem', md: '2.125rem' }
           }}
         >
           {user.username}
         </Typography>
-        <Typography 
-          variant="body1" 
-          color="text.secondary" 
+        <Typography
+          variant="body1"
+          color="text.secondary"
           gutterBottom
-          sx={{ 
+          sx={{
             fontSize: { xs: '0.875rem', sm: '1rem' }
           }}
         >
           {user.email}
         </Typography>
-        <Typography 
-          variant="body2" 
+        <Typography
+          variant="body2"
           color="text.secondary"
-          sx={{ 
+          sx={{
             fontSize: { xs: '0.75rem', sm: '0.875rem' }
           }}
         >
@@ -199,33 +199,35 @@ const Profile: React.FC = () => {
         </Typography>
       </Box>
 
-      {/* Cards Container */}
-      <Box sx={{ 
-        display: 'flex', 
-        flexDirection: { xs: 'column', lg: 'row' },
-        gap: { xs: 2, sm: 3 },
-        justifyContent: 'center',
-        alignItems: { xs: 'center', lg: 'stretch' },
-        width: '100%',
-        maxWidth: { xs: '100%', sm: '500px', md: '600px', lg: '1000px' },
-        px: { xs: 0, sm: 1 }
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        width: '85vw',
+        height: '100%',
       }}>
-        {/* Profil Bilgileri */}
-        <Box sx={{ 
-          flex: { xs: 'none', lg: 1 },
-          width: { xs: '100%', sm: '100%', md: '100%', lg: 'auto' },
-          minWidth: { xs: '280px', sm: '400px', lg: '400px' },
-          maxWidth: { xs: '100%', sm: '480px', md: '550px', lg: '480px' }
+        {/* Cards Container */}
+        <Box sx={{
+          display: 'flex',
+          flexDirection: "row",
+          alignContent: "center",
+          justifyContent: "space-between",
+          flexGrow: 1,
         }}>
-          <Paper elevation={3} sx={{ 
-            p: { xs: 2, sm: 3, md: 4 }, 
-            height: '100%', 
-            textAlign: 'center' 
+          {/* Profil Bilgileri */}
+          <Paper elevation={3} sx={{
+            p: { xs: 2, sm: 3, md: 4 },
+            width: "50%",
+            height: '100%',
           }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: { xs: 2, sm: 3 } }}>
+            <Box sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mb: { xs: 2, sm: 3 }
+            }}>
               <PersonIcon sx={{ mr: 2, color: 'primary.main', fontSize: { xs: 24, sm: 28 } }} />
-              <Typography 
-                variant="h6" 
+              <Typography
+                variant="h6"
                 fontWeight="bold"
                 sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
               >
@@ -233,19 +235,19 @@ const Profile: React.FC = () => {
               </Typography>
             </Box>
             <Divider sx={{ mb: { xs: 2, sm: 3 } }} />
-            
+
             {profileError && (
               <Alert severity="error" sx={{ mb: 3 }}>
                 {profileError}
               </Alert>
             )}
-            
+
             {profileSuccess && (
               <Alert severity="success" sx={{ mb: 3 }}>
                 {profileSuccess}
               </Alert>
             )}
-            
+
             <Box component="form" onSubmit={handleProfileSubmit}>
               <TextField
                 margin="normal"
@@ -260,7 +262,7 @@ const Profile: React.FC = () => {
                 variant="outlined"
                 sx={{ mb: 2 }}
               />
-              
+
               <TextField
                 margin="normal"
                 required
@@ -275,7 +277,7 @@ const Profile: React.FC = () => {
                 variant="outlined"
                 sx={{ mb: 3 }}
               />
-              
+
               <Button
                 type="submit"
                 variant="contained"
@@ -283,7 +285,7 @@ const Profile: React.FC = () => {
                 startIcon={profileLoading ? <CircularProgress size={20} color="inherit" /> : <SaveIcon />}
                 disabled={profileLoading}
                 fullWidth
-                sx={{ 
+                sx={{
                   py: { xs: 1.2, sm: 1.5 },
                   fontSize: { xs: '0.875rem', sm: '1rem' }
                 }}
@@ -292,24 +294,21 @@ const Profile: React.FC = () => {
               </Button>
             </Box>
           </Paper>
-        </Box>
-        
-        {/* Şifre Değiştirme */}
-        <Box sx={{ 
-          flex: { xs: 'none', lg: 1 },
-          width: { xs: '100%', sm: '100%', md: '100%', lg: 'auto' },
-          minWidth: { xs: '280px', sm: '400px', lg: '400px' },
-          maxWidth: { xs: '100%', sm: '480px', md: '550px', lg: '480px' }
-        }}>
-          <Paper elevation={3} sx={{ 
-            p: { xs: 2, sm: 3, md: 4 }, 
-            height: '100%', 
-            textAlign: 'center' 
+
+          {/* Şifre Değiştirme */}
+          <Paper elevation={2} sx={{
+            p: { xs: 2, sm: 3, md: 4 },
+            height: '100%',
+            width: "50%",
+            textAlign: 'center'
           }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: { xs: 2, sm: 3 } }}>
+            <Box sx={{
+              display: 'flex',
+              mb: { xs: 2, sm: 3 }
+            }}>
               <LockIcon sx={{ mr: 2, color: 'primary.main', fontSize: { xs: 24, sm: 28 } }} />
-              <Typography 
-                variant="h6" 
+              <Typography
+                variant="h6"
                 fontWeight="bold"
                 sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
               >
@@ -317,24 +316,28 @@ const Profile: React.FC = () => {
               </Typography>
             </Box>
             <Divider sx={{ mb: { xs: 2, sm: 3 } }} />
-            
+
             {passwordError && (
               <Alert severity="error" sx={{ mb: 3 }}>
                 {passwordError}
               </Alert>
             )}
-            
+
             {passwordSuccess && (
               <Alert severity="success" sx={{ mb: 3 }}>
                 {passwordSuccess}
               </Alert>
             )}
-            
-            <Box component="form" onSubmit={handlePasswordSubmit}>
+
+            <Box component="form" onSubmit={handlePasswordSubmit}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+              }}>
               <TextField
                 margin="normal"
                 required
-                fullWidth
                 id="currentPassword"
                 label="Mevcut Şifre"
                 name="currentPassword"
@@ -343,13 +346,12 @@ const Profile: React.FC = () => {
                 onChange={handlePasswordChange}
                 disabled={passwordLoading}
                 variant="outlined"
-                sx={{ mb: 2 }}
+                fullWidth
               />
-              
+
               <TextField
                 margin="normal"
                 required
-                fullWidth
                 id="newPassword"
                 label="Yeni Şifre"
                 name="newPassword"
@@ -358,13 +360,12 @@ const Profile: React.FC = () => {
                 onChange={handlePasswordChange}
                 disabled={passwordLoading}
                 variant="outlined"
-                sx={{ mb: 2 }}
+                fullWidth
               />
-              
+
               <TextField
                 margin="normal"
                 required
-                fullWidth
                 id="confirmPassword"
                 label="Yeni Şifre Tekrar"
                 name="confirmPassword"
@@ -373,19 +374,18 @@ const Profile: React.FC = () => {
                 onChange={handlePasswordChange}
                 disabled={passwordLoading}
                 variant="outlined"
-                sx={{ mb: 3 }}
+                fullWidth
               />
-              
+
               <Button
                 type="submit"
                 variant="contained"
-                size="large"
                 startIcon={passwordLoading ? <CircularProgress size={20} color="inherit" /> : <EditIcon />}
                 disabled={passwordLoading}
-                fullWidth
-                sx={{ 
+                sx={{
                   py: { xs: 1.2, sm: 1.5 },
-                  fontSize: { xs: '0.875rem', sm: '1rem' }
+                  fontSize: { xs: '0.875rem', sm: '1rem' },
+                  mt: 2 
                 }}
               >
                 {passwordLoading ? 'Değiştiriliyor...' : 'Şifreyi Değiştir'}
@@ -394,6 +394,7 @@ const Profile: React.FC = () => {
           </Paper>
         </Box>
       </Box>
+
     </Box>
   );
 };
