@@ -229,34 +229,6 @@ const Calendar: React.FC = () => {
         width: 1,
         maxWidth: 1,
       }}>
-        {/* Takvim Başlığı ve Kontroller */}
-        {/* <Paper elevation={2} sx={{ p: 2, mb: 1, flexShrink: 0, width: '100%'}}>
-          <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2}>
-            <Typography variant="h4" component="h1" color="primary">
-              Takvim
-            </Typography>
-
-            <Box display="flex" alignItems="center" gap={1}>
-              <Tooltip title="Bugün">
-                <IconButton onClick={handleToday} color="primary">
-                  <TodayIcon />
-                </IconButton>
-              </Tooltip>
-
-              <IconButton onClick={handlePreviousMonth}>
-                <ChevronLeft />
-              </IconButton>
-
-              <Typography variant="h6" sx={{ minWidth: 200, textAlign: 'center' }}>
-                {format(currentDate, 'MMMM yyyy', { locale: tr })}
-              </Typography>
-
-              <IconButton onClick={handleNextMonth}>
-                <ChevronRight />
-              </IconButton>
-            </Box>
-          </Box>
-        </Paper> */}
 
         {/* Takvim Grid */}
         <Paper elevation={2} sx={{
