@@ -1,11 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const { connectDB } = require('./config/mongodb');
+const mongoose = require('mongoose');
 
 // Routes
-const userRoutes = require('./routes/users');
-const taskRoutes = require('./routes/tasks');
+const userRoutes = require('../routes/users');
+const taskRoutes = require('../routes/tasks');
 
 // Load environment variables
 dotenv.config();
@@ -27,6 +27,9 @@ if (missingEnvVars.length > 0) {
   }
 }
 
+// MongoDB connection string
+const MONGODB_URI = process.env.MONGODB_URI;
+
 // Initialize Express app
 const app = express();
 
@@ -39,16 +42,16 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Database setup and server start
+// Connect to MongoDB and start server
 const startServer = async () => {
   try {
     // Connect to MongoDB
     console.log('Connecting to MongoDB...');
-    const dbConnected = await connectDB();
-    
-    if (!dbConnected) {
-      console.error('Failed to connect to MongoDB. Server will start but may not function correctly.');
-    }
+    await mongoose.connect(MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    console.log(`MongoDB connected: ${mongoose.connection.host}`);
     
     // Start server
     const PORT = process.env.PORT || 3001;
@@ -58,6 +61,7 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error('Error starting server:', error);
+    process.exit(1);
   }
 };
 
@@ -79,4 +83,4 @@ app.use((err, req, res, next) => {
 // Start the server
 startServer();
 
-module.exports = app;
+module.exports = app; 
