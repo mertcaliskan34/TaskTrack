@@ -1,127 +1,198 @@
-# TaskTrack - Öğrenci Görev Takip Sistemi
+# TaskTrack
 
-Üniversite öğrencileri için görev takibini kolaylaştıran, verimliliği artıran bir web uygulaması.
+A comprehensive full-stack task management application designed specifically for university students to enhance productivity and academic success. Built with modern web technologies and featuring an intuitive user interface, TaskTrack helps students organize assignments, track deadlines, and maintain academic progress.
 
-## İçindekiler
+## Overview
 
--   [Proje Hakkında](#proje-hakkında)
-    -   [Özellikler](#özellikler)
-    -   [Teknolojiler](#teknolojiler)
+TaskTrack addresses the common challenges university students face in managing multiple assignments, projects, and exam deadlines. The application provides a centralized platform for task organization, progress tracking, and productivity insights, helping students stay on top of their academic responsibilities.
 
-## Proje Hakkında
+## Key Features
 
-Üniversite öğrencileri, ödevlerini, sınav tarihlerini ve günlük görevlerini takip etmekte zorlanabiliyor. TaskTrack, bu sorunlara çözüm sunarak öğrencilerin zamanlarını daha iyi yönetmelerine ve akademik başarılarını artırmalarına yardımcı olmayı amaçlıyor.
+### Task Management
+- **Comprehensive Task Creation**: Create tasks with titles, descriptions, due dates, and categorization
+- **Task Categorization**: Organize tasks by type (Assignments, Exams, Daily Tasks)
+- **Status Tracking**: Monitor task progress with status indicators (Pending, In Progress, Completed)
+- **Due Date Management**: Visual indicators for approaching deadlines and overdue tasks
+- **Task Editing**: Full CRUD operations for task management
 
-### Özellikler
+### Calendar Integration
+- **Interactive Calendar View**: Monthly calendar with task visualization
+- **Date-based Task Display**: See all tasks scheduled for specific dates
+- **Quick Task Creation**: Add tasks directly from calendar dates
+- **Visual Task Indicators**: Color-coded task types for easy identification
 
-*   **Görev Yönetimi:** Ödev, sınav, proje gibi görevleri ekleme, düzenleme ve tamamlama.
-*   **Takvim Görünümü:** Görevlerin takvim üzerinde görselleştirilmesi.
-*   **Hatırlatıcılar:** Yaklaşan görevler için bildirimler.
-*   **Kullanıcı Dostu Arayüz:** Basit ve anlaşılır tasarım.
-*   **Akademisyen Modülü (Gelecek Geliştirme):** Akademisyenlerin ödev ve duyuru paylaşabilmesi.
+### Analytics & Insights
+- **Performance Dashboard**: Comprehensive statistics and progress tracking
+- **Completion Rates**: Visual progress indicators and completion percentages
+- **Task Distribution**: Breakdown of tasks by type and status
+- **Time-based Analytics**: Weekly and monthly completion statistics
+- **Motivational Feedback**: Performance-based encouragement messages
 
-### Teknolojiler
+### User Experience
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **Modern UI/UX**: Clean, intuitive interface built with Material-UI
+- **Real-time Updates**: Instant task status updates and synchronization
+- **Secure Authentication**: JWT-based user authentication and authorization
 
-*   **Frontend:** React + TypeScript + Vite
-*   **Backend:** Node.js + Express
-*   **Veritabanı:** MongoDB
-*   **Diğer Araçlar:** Git, ESLint, Prettier
+## Technology Stack
 
-## Proje Yapısı
+### Frontend
+- **React 19** - Modern React with latest features
+- **TypeScript** - Type-safe development
+- **Material-UI (MUI)** - Professional component library
+- **React Router** - Client-side routing
+- **Axios** - HTTP client for API communication
+- **Vite** - Fast build tool and development server
+- **Date-fns** - Date manipulation and formatting
+
+### Backend
+- **Node.js** - JavaScript runtime environment
+- **Express.js** - Web application framework
+- **MongoDB** - NoSQL database
+- **Mongoose** - MongoDB object modeling
+- **JWT** - JSON Web Token authentication
+- **bcrypt** - Password hashing
+- **CORS** - Cross-origin resource sharing
+
+### Development Tools
+- **ESLint** - Code linting and quality assurance
+- **Nodemon** - Development server auto-restart
+- **Git** - Version control
+
+## Project Structure
 
 ```
 TaskTrack/
-├── backend/          # Backend API (Node.js + Express)
+├── backend/                 # Node.js API Server
 │   ├── src/
-│   │   ├── controllers/
-│   │   ├── models/
-│   │   ├── routes/
-│   │   └── middlewares/
+│   │   ├── controllers/     # Route handlers
+│   │   ├── models/          # Database models
+│   │   ├── routes/          # API routes
+│   │   ├── middlewares/     # Authentication middleware
+│   │   └── config/          # Database configuration
 │   └── package.json
-├── frontend/         # Frontend (React + TypeScript)
+├── frontend/                # React Application
 │   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   └── services/
+│   │   ├── components/      # Reusable components
+│   │   ├── pages/           # Application pages
+│   │   ├── services/        # API service layer
+│   │   ├── context/         # React context providers
+│   │   └── assets/          # Static assets
 │   └── package.json
 └── README.md
 ```
 
-## Kurulum
+## API Endpoints
 
-### Gereksinimler
-- Node.js (v16 veya üzeri)
-- npm veya yarn
-- MongoDB (yerel veya cloud)
+### Authentication
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User authentication
+- `GET /api/auth/profile` - Get user profile
+- `PUT /api/auth/profile` - Update user profile
+- `PUT /api/auth/password` - Change password
 
-### Backend Kurulumu
+### Task Management
+- `GET /api/tasks` - Get all user tasks
+- `POST /api/tasks` - Create new task
+- `GET /api/tasks/:id` - Get specific task
+- `PUT /api/tasks/:id` - Update task
+- `PUT /api/tasks/:id/status` - Update task status
+- `DELETE /api/tasks/:id` - Delete task
+
+## Installation & Setup
+
+### Prerequisites
+- Node.js (v16 or higher)
+- MongoDB (local or cloud instance)
+- npm or yarn package manager
+
+### Backend Setup
 ```bash
 cd backend
 npm install
 npm start
 ```
 
-Backend varsayılan olarak `http://localhost:3000` adresinde çalışır.
-
-### Frontend Kurulumu
+### Frontend Setup
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-Frontend varsayılan olarak `http://localhost:5173` adresinde çalışır.
-
-### Veritabanı Kurulumu
-MongoDB bağlantısı için `backend/.env` dosyasını oluşturun:
+### Environment Configuration
+Create a `.env` file in the backend directory:
 ```env
 MONGODB_URI=mongodb://localhost:27017/tasktrack
 JWT_SECRET=your-secret-key
+JWT_EXPIRES_IN=7d
 PORT=3000
 ```
 
-## Geliştirme
+## Development
 
-### Proje Yapısı
-- `backend/` - Node.js + Express API
-- `frontend/` - React + TypeScript + Vite
-- Her klasör kendi `package.json` dosyasına sahip
-
-### Geliştirme Komutları
+### Running in Development Mode
 ```bash
-# Backend geliştirme
+# Backend (Terminal 1)
 cd backend
 npm run dev
 
-# Frontend geliştirme  
+# Frontend (Terminal 2)
 cd frontend
 npm run dev
-
-# Her iki servisi aynı anda çalıştırma
-# Terminal 1: cd backend && npm run dev
-# Terminal 2: cd frontend && npm run dev
 ```
 
-### API Endpoints
-- `GET /api/tasks` - Tüm görevleri getir
-- `POST /api/tasks` - Yeni görev oluştur
-- `PUT /api/tasks/:id` - Görev güncelle
-- `DELETE /api/tasks/:id` - Görev sil
-- `POST /api/auth/login` - Kullanıcı girişi
-- `POST /api/auth/register` - Kullanıcı kaydı
+### Building for Production
+```bash
+# Frontend build
+cd frontend
+npm run build
 
-## Katkıda Bulunma
+# Backend start
+cd backend
+npm start
+```
 
-1. Bu repository'yi fork edin
-2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Değişikliklerinizi commit edin (`git commit -m 'Add some amazing feature'`)
-4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
-5. Pull Request oluşturun
+## Features in Detail
 
-## Lisans
+### Dashboard
+- **Task Overview**: Quick statistics and task summaries
+- **Status-based Organization**: Tasks grouped by completion status
+- **Quick Actions**: One-click task status updates
+- **Progress Tracking**: Visual indicators for task completion
 
-Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakın.
+### Calendar View
+- **Monthly Calendar**: Full month view with task indicators
+- **Interactive Dates**: Click to view or create tasks for specific dates
+- **Task Badges**: Visual indicators showing number of tasks per day
+- **Responsive Design**: Optimized for all screen sizes
 
-## İletişim
+### Statistics & Analytics
+- **Performance Metrics**: Completion rates and productivity insights
+- **Task Distribution**: Breakdown by type and status
+- **Time-based Analysis**: Weekly and monthly completion trends
+- **Visual Charts**: Progress bars and completion indicators
 
-Proje hakkında sorularınız için issue açabilir veya pull request gönderebilirsiniz.
+## Security Features
+
+- **JWT Authentication**: Secure token-based authentication
+- **Password Hashing**: bcrypt encryption for password security
+- **User Authorization**: Route protection and user-specific data access
+- **Input Validation**: Server-side validation for all user inputs
+- **CORS Protection**: Configured cross-origin resource sharing
+
+## Performance Optimizations
+
+- **React Context**: Efficient state management
+- **Component Optimization**: Memoized components for better performance
+- **Lazy Loading**: Optimized component loading
+- **Database Indexing**: Optimized database queries
+- **Responsive Images**: Optimized asset loading
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+**TaskTrack** - Empowering students to achieve academic excellence through effective task management and productivity tracking.
